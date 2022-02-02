@@ -18,7 +18,7 @@
             "type": "image/x-icon"
         }
     ],
-    "start_url": ".",
+    "start_url": "/react-robos-pwa/",
     "display": "standalone",
     "theme_color": "#000000",
     "background_color": "#ffffff"
