@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/react-robos-pwa/static/css/main.a85b35f9.css",
+    "main.js": "/react-robos-pwa/static/js/main.48479ded.js",
+    "static/media/SEGA.woff": "/react-robos-pwa/static/media/SEGA.47b4bfa94ef243af4a5b.woff",
+    "index.html": "/react-robos-pwa/index.html",
+    "main.a85b35f9.css.map": "/react-robos-pwa/static/css/main.a85b35f9.css.map",
+    "main.48479ded.js.map": "/react-robos-pwa/static/js/main.48479ded.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.a85b35f9.css",
+    "static/js/main.48479ded.js"
+  ]
+}
