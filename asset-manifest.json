@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/react-robos-pwa/static/css/main.18efd9c7.css",
-    "main.js": "/react-robos-pwa/static/js/main.dc18a98e.js",
+    "main.js": "/react-robos-pwa/static/js/main.454ee433.js",
     "service-worker.js": "/react-robos-pwa/service-worker.js",
     "static/media/SEGA.woff": "/react-robos-pwa/static/media/SEGA.47b4bfa94ef243af4a5b.woff",
     "index.html": "/react-robos-pwa/index.html",
     "main.18efd9c7.css.map": "/react-robos-pwa/static/css/main.18efd9c7.css.map",
-    "main.dc18a98e.js.map": "/react-robos-pwa/static/js/main.dc18a98e.js.map"
+    "main.454ee433.js.map": "/react-robos-pwa/static/js/main.454ee433.js.map"
   },
   "entrypoints": [
     "static/css/main.18efd9c7.css",
-    "static/js/main.dc18a98e.js"
+    "static/js/main.454ee433.js"
   ]
 }
