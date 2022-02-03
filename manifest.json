@@ -1,6 +1,6 @@
 {
   "name": "React Robots PWA",
-  "short_name": "React Robots PWA",
+  "short_name": "Robots PWA",
   "icons": [
       {
           "src": "android-chrome-192x192.png",
