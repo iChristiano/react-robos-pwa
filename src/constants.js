@@ -7,3 +7,8 @@ export const REQUEST_ROBOTS_FAILED = 'REQUEST_ROBOTS_FAILED';
 export const SELECTED_ROBOT = 'SELECTED_ROBOT';
 
 export const MODAL = 'MODAL';
+
+export const SW_INIT = 'SW_INIT';
+export const SW_UPDATE = 'SW_UPDATE';
+
+export const ONLINE = 'ONLINE';

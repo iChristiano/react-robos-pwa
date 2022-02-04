@@ -4,7 +4,10 @@ import {
     REQUEST_ROBOTS_SUCCESS,
     REQUEST_ROBOTS_FAILED,
     SELECTED_ROBOT,
-    MODAL
+    MODAL,
+    SW_INIT,
+    SW_UPDATE,
+    ONLINE
 } from './constants';
 
 export const setSearchField = (text) => ({
@@ -29,3 +32,19 @@ export const updateModal = (modal) => ({
     type: MODAL,
     payload: modal
 });
+
+export const setSwInit = (registration) => ({ 
+    type: SW_INIT,
+    payload: registration 
+});
+
+export const setSwUpdate = (registration) => ({ 
+    type: SW_UPDATE, 
+    payload: registration 
+});
+
+export const updateOnline = (isOnline) => ({
+    type: ONLINE, 
+    payload: isOnline 
+});
+

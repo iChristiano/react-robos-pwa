@@ -4,7 +4,10 @@ import {
     REQUEST_ROBOTS_SUCCESS,
     REQUEST_ROBOTS_FAILED,
     SELECTED_ROBOT,
-    MODAL
+    MODAL,
+    SW_INIT,
+    SW_UPDATE,
+    ONLINE
 } from './constants';
 
 const initialStateSearch = {
@@ -62,7 +65,7 @@ export const selectedRobotReducer = (state=initialStateSelectedRobot, action={})
     return returnState;
 };
 
-const initialStateModal= {
+const initialStateModal = {
     modal: false
 };
 
@@ -71,6 +74,49 @@ export const modalReducer = (state=initialStateModal, action={}) => {
     switch(action.type){
         case MODAL:
         returnState = Object.assign({}, state, {modal: action.payload});
+            break;
+        default:
+            returnState = state;
+    }
+    return returnState;
+};
+
+const initalStateServiceWorker = {
+    serviceWorkerInitialized: false,
+    serviceWorkerUpdated: false,
+    serviceWorkerRegistration: null
+};
+
+export const serviceWorkerReducer = (state=initalStateServiceWorker, action={}) => {
+    let returnState;
+    switch(action.type){
+        case SW_INIT:
+            returnState = Object.assign({}, state, {
+                serviceWorkerInitialized: !state.serviceWorkerInitialized,
+                serviceWorkerRegistration: action.payload || state.serviceWorkerRegistration
+            });
+            break;
+        case SW_UPDATE:
+            returnState = Object.assign({}, state, {
+                serviceWorkerUpdated: !state.serviceWorkerUpdated,
+                serviceWorkerRegistration: action.payload || state.serviceWorkerRegistration
+            });
+            break;
+        default:
+            returnState = state;
+    }
+    return returnState;
+};
+
+const initialStateOnline = {
+    isOnline: navigator.onLine
+};
+
+export const onlineReducer = (state=initialStateOnline, action={}) => {
+    let returnState;
+    switch(action.type){
+        case ONLINE:
+        returnState = Object.assign({}, state, {isOnline: action.payload});
             break;
         default:
             returnState = state;

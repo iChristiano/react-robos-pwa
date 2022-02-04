@@ -1,12 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux'; 
-import SearchBox from '../../components/searchbox/SearchBox';
-import CardList from '../../components/cardlist/CardList';
-import Scroll from '../../components/scroll/Scroll';
-import ErrorBoundary from '../errorboundary/ErrorBoundary';
+import { setSearchField, requestRobots, setSelectedRobot, updateModal, setSwInit, setSwUpdate, updateOnline } from '../../actions';
+import MainPage from '../../pages/MainPage';
 import './App.css';
-import { setSearchField, requestRobots, setSelectedRobot, updateModal } from '../../actions';
-import ModalCard from '../../components/modalcard/ModalCard';
+import Alert from '../../components/alert/Alert';
+import { SW_INIT, SW_UPDATE } from '../../constants';
 
 const mapStateToProps = (state) => {
     return {
@@ -15,7 +13,11 @@ const mapStateToProps = (state) => {
         isPending: state.requestReducer.isPending,
         error: state.requestReducer.error,
         selectedRobot: state.selectedRobotReducer.selectedRobot,
-        modal: state.modalReducer.modal
+        modal: state.modalReducer.modal,
+        serviceWorkerInitialized: state.serviceWorkerReducer.serviceWorkerInitialized,
+        serviceWorkerUpdated: state.serviceWorkerReducer.serviceWorkerUpdated,
+        serviceWorkerRegistration: state.serviceWorkerReducer.serviceWorkerRegistration,
+        isOnline: state.onlineReducer.isOnline
     };
 };
 
@@ -31,37 +33,78 @@ const mapDispatchToProps = (dispatch) => {
         },
         closeModal: (modal) => {
             dispatch(updateModal(modal))
+        },
+        setOnline: () => {
+            dispatch(updateOnline(true));
+            dispatch(setSwUpdate());
+        },
+        setOffline: () => {
+            dispatch(updateOnline(false))
         }
     };
 };
 
+
+
 class App extends React.Component {
 
+    // Register the event listeners
     componentDidMount() {
-        this.props.onRequestRobots();
+        window.addEventListener('offline', this.props.setOffline);
+        window.addEventListener('online', this.props.setOnline);
+        // cleanup if we unmount
+        return () => {
+            window.removeEventListener('offline', this.props.setOffline);
+            window.removeEventListener('online', this.props.setOnline);
+        }
     }
 
     render(){
-        const { searchField, onSearchChange, robots, isPending, selectedRobot, onSelectedRobotChange, modal, closeModal } = this.props;
-        const filteredRobots = robots.filter(robot => {
-            return robot.name.toLowerCase().includes(searchField.toLowerCase());
-        });
-        let returnElement;
-        if (!robots.length && isPending) {
-            returnElement = <h1 className='tc'>Loading...</h1>;
-        } else {
-            returnElement = <div className='tc'>
-                <h1 className='f1'>React Robos</h1>
-                <SearchBox searchChange={onSearchChange} />
-                <Scroll>
-                    <ErrorBoundary>
-                        <CardList robots={filteredRobots} onSelectedRobotChange={onSelectedRobotChange}/>
-                    </ErrorBoundary>
-                </Scroll>
-                <ModalCard selectedRobot={selectedRobot} closeModal={closeModal} modal={modal}/>
-            </div>;
-        }
-        return returnElement;
+        const { serviceWorkerInitialized, serviceWorkerUpdated, serviceWorkerRegistration, isOnline } = this.props;
+
+        const updateServiceWorker = () => {
+            if (serviceWorkerRegistration && serviceWorkerRegistration.waiting) {
+                serviceWorkerRegistration.waiting.postMessage({ type: 'SKIP_WAITING' });
+                serviceWorkerRegistration.waiting.addEventListener('statechange', e => {
+                    if (e.target.state === 'activated') {
+                        window.location.reload();
+                    }
+                });
+            } else {
+                navigator.serviceWorker.getRegistrations()
+                    .then((registrations) => { 
+                        for(let registration of registrations) { 
+                            registration.unregister();
+                        } 
+                    }).then(() => {
+                        window.location.reload(true);
+                    }); 
+            }
+        };
+
+        return(
+        <div>
+            <div className="App-alert">
+            {
+                serviceWorkerInitialized && (
+                <Alert text="Page has been saved for offline use." type={SW_INIT} />)
+            }
+            {
+                serviceWorkerUpdated && (
+                <Alert
+                    text="There is a new version available."
+                    buttonText="Update"
+                    type={SW_UPDATE}
+                    onClick={updateServiceWorker}
+                />)
+            }
+            </div>
+            {
+                (isOnline) ? <p className="tr white pr2">&#x1F4F6; online (go offline)</p> : <p className="tr white pr2">{'\u274C'} offline</p>
+            }
+            <MainPage { ...this.props } />
+            
+        </div>)
     }
 }
 
